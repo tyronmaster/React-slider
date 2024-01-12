@@ -1,31 +1,19 @@
 #root {
   margin: 0 auto;
-  padding: 120px 32px 94px;
+}
+
+.slider {
+  padding: 120px 0 94px;
 }
 
 .container {
   max-width: 1440px;
-}
-
-.slider__item {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  text-align: left;
-}
-
-.slider__track {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
+  padding: 0 40px;
 }
 
 .slider__header {
   max-width: 845px;
   margin-bottom: 57px;
-  padding: 0 8px;
 }
 
 .slider__title {
@@ -47,10 +35,34 @@
 }
 
 .slider__wrapper {
+  width: 100%;
 }
 
 .slider__track {
+  position: relative;
+  height: 456px;
   margin-bottom: 37px;
+  overflow: hidden;
+}
+
+.slider__items {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(0);
+  transition: 0.5s ease-in-out;
+}
+
+.slider__item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .item__picture {
@@ -99,6 +111,11 @@
   letter-spacing: -0.056px;
   height: 58px;
   overflow: hidden;
+  transition: 0.5s ease-in-out;
+}
+
+.slider__item:hover .item__link {
+  color: var(--Emerald);
 }
 
 .item__date {
@@ -120,6 +137,7 @@
   cursor: pointer;
   padding: 12px 0;
   transition: 0.5s ease-in-out;
+  cursor: pointer;
 }
 .left svg rect,
 .right svg rect {
@@ -127,7 +145,9 @@
   transition: 0.5s ease-in-out;
 }
 .slider__control:hover.left svg rect,
-.slider__control:hover.right svg rect {
+.slider__control:hover.right svg rect,
+.slider__control.disabled.left svg rect,
+.slider__control.disabled.right svg rect {
   fill: #c9d0e1;
 }
 
@@ -137,6 +157,8 @@
   transition: 0.5s ease-in-out;
 }
 .slider__control:hover.left svg path,
-.slider__control:hover.right svg path {
+.slider__control:hover.right svg path,
+.slider__control.disabled.left svg path,
+.slider__control.disabled.right svg path {
   stroke: #c9d0e1;
 }
