@@ -14,7 +14,7 @@ function App() {
     {
       id: 1,
       mask: MaskTypes.LeafLeft,
-      src: "./assets/images/goat.jpg",
+      src: "https://celes.club/uploads/posts/2021-12/1640090749_5-celes-club-p-zhivotnie-v-derevne-zhivotnie-krasivo-foto-6.jpg",
       title:
         "Как повысить удои коров: факторы, от которых зависит молочная продуктивность",
       date: "22 ноября 2023      ",
@@ -22,7 +22,7 @@ function App() {
     {
       id: 2,
       mask: MaskTypes.LeafRight,
-      src: "./assets/images/harvester.jpg",
+      src: "https://celes.club/uploads/posts/2021-12/1640090810_4-celes-club-p-zhivotnie-v-derevne-zhivotnie-krasivo-foto-4.jpg",
       title:
         "Как повысить удои коров: факторы, от которых зависит молочная продуктивность",
       date: "22 ноября 2023      ",
@@ -30,7 +30,7 @@ function App() {
     {
       id: 3,
       mask: MaskTypes.Wide,
-      src: "./assets/images/cow-laying.jpg",
+      src: "https://celes.club/uploads/posts/2021-12/1640090779_2-celes-club-p-zhivotnie-v-derevne-zhivotnie-krasivo-foto-2.jpg",
       title:
         "Как повысить удои коров: факторы, от которых зависит молочная продуктивность",
       date: "22 ноября 2023      ",
@@ -38,7 +38,7 @@ function App() {
     {
       id: 4,
       mask: MaskTypes.Circle,
-      src: "./assets/images/cow-standing.jpg",
+      src: "https://celes.club/uploads/posts/2021-12/1640090778_3-celes-club-p-zhivotnie-v-derevne-zhivotnie-krasivo-foto-3.jpg",
       title:
         "Как повысить удои коров: факторы, от которых зависит молочная продуктивность",
       date: "22 ноября 2023      ",
@@ -47,7 +47,7 @@ function App() {
     {
       id: 5,
       mask: MaskTypes.Rounded,
-      src: "./assets/images/pigs.jpg",
+      src: "https://celes.club/uploads/posts/2021-12/1640090732_1-celes-club-p-zhivotnie-v-derevne-zhivotnie-krasivo-foto-1.jpg",
       title:
         "Как повысить удои коров: факторы, от которых зависит молочная продуктивность",
       date: "22 ноября 2023      ",
@@ -123,17 +123,20 @@ function App() {
     let start = slider.start;
     if (start - slider.step > padding) {
       start = 0;
+      setButtonsState({ right: true, left: false });
     } else if (start + sliderWidth - slider.step < windowWidth) {
       start = -(sliderWidth - windowWidth + padding);
+      setButtonsState({ left: true, right: false });
     } else {
       start = start - slider.step;
+      setButtonsState({ left: true, right: true });
     }
 
     setSlider({ ...slider, start });
     sliderTrack.current!.style.transform = `translateX(${start}px)`;
   };
 
-  const onMouseDown = (e: React.MouseEvent):void => {
+  const onMouseDown = (e: React.MouseEvent): void => {
     setSlider({ ...slider, posX: e.clientX, mouseDown: true });
   };
   const onMouseMove = (e: React.MouseEvent) => {
@@ -157,10 +160,13 @@ function App() {
 
     if (start - slider.step > padding) {
       start = 0;
+      setButtonsState({ right: true, left: false });
     } else if (start + sliderWidth - slider.step < windowWidth) {
       start = -(sliderWidth - windowWidth + padding);
+      setButtonsState({ left: true, right: false });
     } else {
       start = start - slider.step;
+      setButtonsState({ left: true, right: true });
     }
 
     setSlider({ ...slider, start, mouseDown: false });
@@ -204,23 +210,24 @@ function App() {
           <div className="slider__items" ref={sliderTrack}>
             {slides.map((slide) => {
               // const imgUrl = new URL(slide.src, import.meta.url).href
-              return(
-              <div className="slider__item" key={slide.id}>
-                <div className={"item__picture" + " " + slide.mask}>
-                  <img
-                    src={slide.src}
-                    alt="item image"
-                    className="item__image"
-                  />
+              return (
+                <div className="slider__item" key={slide.id}>
+                  <div className={"item__picture" + " " + slide.mask}>
+                    <img
+                      src={slide.src}
+                      alt="item image"
+                      className="item__image"
+                    />
+                  </div>
+                  <div className="item__text">
+                    <a href="#" className="item__link">
+                      {slide.title}
+                    </a>
+                    <p className="item__date">{slide.date}</p>
+                  </div>
                 </div>
-                <div className="item__text">
-                  <a href="#" className="item__link">
-                    {slide.title}
-                  </a>
-                  <p className="item__date">{slide.date}</p>
-                </div>
-              </div>
-            )})}
+              );
+            })}
           </div>
         </div>
 
