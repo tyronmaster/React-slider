@@ -14,7 +14,7 @@ function App() {
     {
       id: 1,
       mask: MaskTypes.LeafLeft,
-      src: "src/assets/images/goat.jpg",
+      src: "./assets/images/goat.jpg",
       title:
         "Как повысить удои коров: факторы, от которых зависит молочная продуктивность",
       date: "22 ноября 2023      ",
@@ -22,7 +22,7 @@ function App() {
     {
       id: 2,
       mask: MaskTypes.LeafRight,
-      src: "src/assets/images/harvester.jpg",
+      src: "./assets/images/harvester.jpg",
       title:
         "Как повысить удои коров: факторы, от которых зависит молочная продуктивность",
       date: "22 ноября 2023      ",
@@ -30,7 +30,7 @@ function App() {
     {
       id: 3,
       mask: MaskTypes.Wide,
-      src: "src/assets/images/cow-laying.jpg",
+      src: "./assets/images/cow-laying.jpg",
       title:
         "Как повысить удои коров: факторы, от которых зависит молочная продуктивность",
       date: "22 ноября 2023      ",
@@ -38,7 +38,7 @@ function App() {
     {
       id: 4,
       mask: MaskTypes.Circle,
-      src: "src/assets/images/cow-standing.jpg",
+      src: "./assets/images/cow-standing.jpg",
       title:
         "Как повысить удои коров: факторы, от которых зависит молочная продуктивность",
       date: "22 ноября 2023      ",
@@ -47,7 +47,7 @@ function App() {
     {
       id: 5,
       mask: MaskTypes.Rounded,
-      src: "src/assets/images/pigs.jpg",
+      src: "./assets/images/pigs.jpg",
       title:
         "Как повысить удои коров: факторы, от которых зависит молочная продуктивность",
       date: "22 ноября 2023      ",
