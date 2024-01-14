@@ -202,7 +202,9 @@ function App() {
           onMouseUp={onMouseUp}
         >
           <div className="slider__items" ref={sliderTrack}>
-            {slides.map((slide) => (
+            {slides.map((slide) => {
+              // const imgUrl = new URL(slide.src, import.meta.url).href
+              return(
               <div className="slider__item" key={slide.id}>
                 <div className={"item__picture" + " " + slide.mask}>
                   <img
@@ -218,7 +220,7 @@ function App() {
                   <p className="item__date">{slide.date}</p>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </div>
 
@@ -282,7 +284,7 @@ function App() {
                 stroke="#7884A5"
                 strokeWidth="3"
               />
-            </svg>{" "}
+            </svg>
           </div>
         </div>
       </div>
