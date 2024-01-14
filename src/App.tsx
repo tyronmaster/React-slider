@@ -102,10 +102,10 @@ function App() {
     }
   }
 
-  const swipeStart = (e: TouchEvent): void => {
+  const swipeStart = (e: React.TouchEvent): void => {
     setSlider({ ...slider, posX: e.targetTouches[0].clientX });
   };
-  const swipeAction = (e: TouchEvent): void => {
+  const swipeAction = (e: React.TouchEvent): void => {
     const moveX = e.targetTouches[0].clientX;
     const step = slider.posX - moveX;
     const start = slider.start - step;
@@ -133,10 +133,10 @@ function App() {
     sliderTrack.current!.style.transform = `translateX(${start}px)`;
   };
 
-  const onMouseDown = (e: MouseEvent) => {
+  const onMouseDown = (e: React.MouseEvent):void => {
     setSlider({ ...slider, posX: e.clientX, mouseDown: true });
   };
-  const onMouseMove = (e: MouseEvent) => {
+  const onMouseMove = (e: React.MouseEvent) => {
     if (slider.mouseDown) {
       const moveX = e.clientX;
       const step = slider.posX - moveX;
