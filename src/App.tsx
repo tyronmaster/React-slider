@@ -1,14 +1,15 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, TouchEventHandler } from "react";
 import "./App.css";
 
+enum MaskTypes {
+  LeafLeft = "leaf-left",
+  LeafRight = "leaf-right",
+  Wide = "wide",
+  Circle = "circle",
+  Rounded = "rounded",
+}
+
 function App() {
-  enum MaskTypes {
-    LeafLeft = "leaf-left",
-    LeafRight = "leaf-right",
-    Wide = "wide",
-    Circle = "circle",
-    Rounded = "rounded",
-  }
   const [slides] = useState([
     {
       id: 1,
@@ -57,38 +58,106 @@ function App() {
     right: true,
     left: false,
   });
-  const sliderTrack = useRef(null);
-  const speed = 150;
+  // const [transformationPercent, setTransformationPercent] = useState(0);
+  // const [startPosition, setStartPosition] = useState(0);
+  const [slider, setSlider] = useState({
+    start: 0,
+    width: 0,
+    posX: 0,
+    moveX: 0,
+    step: 0,
+    mouseDown: false,
+  });
+  const sliderTrack = useRef<HTMLDivElement>(null);
+  const butonsSpeed = 150;
+  const swiperSpeed = 10;
+  const padding = 26;
 
   function pressRight() {
-    const trackWidth = sliderTrack.current.offsetWidth;
     const windowWidth = window.innerWidth;
+    const sliderWidth = sliderTrack.current!.offsetWidth;
+    const widthChecker = slider.start + sliderWidth - butonsSpeed > windowWidth;
 
-    if (trackStart + trackWidth - speed > windowWidth) {
-      if (!buttonsState.left)
+    if (widthChecker) {
+      if (!buttonsState.left) {
         setButtonsState({ ...buttonsState, left: true });
-
-      const start = trackStart - speed;
-      sliderTrack.current.style.left = start + "px";
-      setTrackStart(start);
+      }
+      const start = slider.start - butonsSpeed;
+      setSlider({ ...slider, start });
+      sliderTrack.current!.style.transform = `translateX(${start}px)`;
     } else {
-      const start = -(trackWidth - windowWidth);
-      sliderTrack.current.style.left = start + "px";
-      setTrackStart(start);
+      const start = -(sliderWidth - windowWidth + padding);
+      setSlider({ ...slider, start });
+      sliderTrack.current!.style.transform = `translateX(${start}px)`;
       setButtonsState({ ...buttonsState, right: false });
     }
   }
 
   function pressLeft() {
-    if (trackStart < 0) {
-      if (!buttonsState.right) setButtonsState({ ...buttonsState, right: true });
-      const start = trackStart + speed;
-      sliderTrack.current.style.left = start + "px";
-      setTrackStart(start);
+    if (slider.start + butonsSpeed < padding) {
+      if (!buttonsState.right)
+        setButtonsState({ ...buttonsState, right: true });
+      const start = slider.start + butonsSpeed;
+      sliderTrack.current!.style.transform = `translateX(${start}px)`;
+      setSlider({ ...slider, start });
     } else {
+      setSlider({ ...slider, start: padding });
+      sliderTrack.current!.style.transform = `translateX(${padding}px)`;
       setButtonsState({ ...buttonsState, left: false });
     }
   }
+
+  const swipeStart = (e: TouchEvent): void => {
+    setSlider({ ...slider, posX: e.targetTouches[0].clientX });
+  };
+  const swipeAction = (e: TouchEvent): void => {
+    setSlider({
+      ...slider,
+      moveX: e.targetTouches[0].clientX,
+      step: slider.posX - slider.moveX,
+      start: slider.start - slider.step,
+    });
+    console.log("posX", slider.posX);
+    console.log("moveX", slider.moveX);
+
+    sliderTrack.current!.style.transform = `translateX(${slider.start / 10}px)`;
+  };
+  const swipeEnd = () => {
+    // setSwipe({ ...swipe, start: e.targetTouches[0].clientX });
+  };
+
+  const onMouseDown = (e: MouseEvent) => {
+    // console.log(e);
+    setSlider({ ...slider, start: e.clientX, mouseDown: true });
+  };
+  const onMouseMove = (e: MouseEvent) => {
+    if (slider.mouseDown) {
+      setSlider({
+        ...slider,
+        moveX: e.clientX,
+        step: slider.start - slider.moveX,
+      });
+      // // setTrackStart(trackStart+swipe.step)
+      sliderTrack.current!.style.transform = `translateX(${-slider.step}px)`;
+    }
+  };
+  const onMouseUp = () => {
+    setSlider({ ...slider, mouseDown: false });
+  };
+
+  useEffect(() => {
+    // console.log(sliderTrack.current.offsetWidth);
+    if (sliderTrack.current) {
+      setSlider({
+        ...slider,
+        width: sliderTrack.current.offsetWidth,
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    setSlider({ ...slider, moveX: slider.posX });
+  }, [slider.posX]);
 
   return (
     <div className="slider">
@@ -102,7 +171,15 @@ function App() {
       </div>
 
       <div className="slider__wrapper">
-        <div className="slider__track">
+        <div
+          className="slider__track"
+          onTouchStart={(e) => swipeStart(e)}
+          onTouchMove={(e) => swipeAction(e)}
+          onTouchEnd={swipeEnd}
+          onMouseDown={(e) => onMouseDown(e)}
+          onMouseMove={(e) => onMouseMove(e)}
+          onMouseUp={onMouseUp}
+        >
           <div className="slider__items" ref={sliderTrack}>
             {slides.map((slide) => (
               <div className="slider__item" key={slide.id}>

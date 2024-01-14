@@ -43,6 +43,7 @@
   height: 456px;
   margin-bottom: 37px;
   overflow: hidden;
+  user-select: none;
 }
 
 .slider__items {
@@ -53,8 +54,12 @@
   position: absolute;
   top: 0;
   left: 0;
-  transform: translateX(0);
+  cursor: grab;
+  transform: translateX(0px);
   transition: 0.5s ease-in-out;
+}
+.slider__items.grabbing {
+  cursor: grabbing;
 }
 
 .slider__item {
@@ -63,6 +68,7 @@
   justify-content: space-between;
   align-items: flex-start;
   text-align: left;
+  /* flex-shrink: 0; */
 }
 
 .item__picture {
@@ -96,6 +102,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  pointer-events: none;
 }
 
 .item__text {
@@ -145,9 +152,7 @@
   transition: 0.5s ease-in-out;
 }
 .slider__control:hover.left svg rect,
-.slider__control:hover.right svg rect,
-.slider__control.disabled.left svg rect,
-.slider__control.disabled.right svg rect {
+.slider__control:hover.right svg rect {
   fill: #c9d0e1;
 }
 
@@ -157,8 +162,12 @@
   transition: 0.5s ease-in-out;
 }
 .slider__control:hover.left svg path,
-.slider__control:hover.right svg path,
-.slider__control.disabled.left svg path,
-.slider__control.disabled.right svg path {
+.slider__control:hover.right svg path {
   stroke: #c9d0e1;
+}
+
+.slider__control.disabled.left,
+.slider__control.disabled.right {
+  opacity: 0.25;
+  pointer-events: none;
 }
