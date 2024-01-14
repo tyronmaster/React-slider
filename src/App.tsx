@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, TouchEventHandler } from "react";
+import { useRef, useState, useEffect } from "react";
 import "./App.css";
 
 enum MaskTypes {
@@ -53,13 +53,10 @@ function App() {
       date: "22 ноября 2023      ",
     },
   ]);
-  const [trackStart, setTrackStart] = useState(0);
   const [buttonsState, setButtonsState] = useState({
     right: true,
     left: false,
   });
-  // const [transformationPercent, setTransformationPercent] = useState(0);
-  // const [startPosition, setStartPosition] = useState(0);
   const [slider, setSlider] = useState({
     start: 0,
     width: 0,
@@ -70,8 +67,7 @@ function App() {
   });
   const sliderTrack = useRef<HTMLDivElement>(null);
   const butonsSpeed = 150;
-  const swiperSpeed = 10;
-  const padding = 26;
+  const padding = 40;
 
   function pressRight() {
     const windowWidth = window.innerWidth;
@@ -92,7 +88,6 @@ function App() {
       setButtonsState({ ...buttonsState, right: false });
     }
   }
-
   function pressLeft() {
     if (slider.start + butonsSpeed < padding) {
       if (!buttonsState.right)
@@ -111,42 +106,68 @@ function App() {
     setSlider({ ...slider, posX: e.targetTouches[0].clientX });
   };
   const swipeAction = (e: TouchEvent): void => {
+    const moveX = e.targetTouches[0].clientX;
+    const step = slider.posX - moveX;
+    const start = slider.start - step;
+
     setSlider({
       ...slider,
-      moveX: e.targetTouches[0].clientX,
-      step: slider.posX - slider.moveX,
-      start: slider.start - slider.step,
+      moveX,
+      step,
     });
-    console.log("posX", slider.posX);
-    console.log("moveX", slider.moveX);
-
-    sliderTrack.current!.style.transform = `translateX(${slider.start / 10}px)`;
+    sliderTrack.current!.style.transform = `translateX(${start}px)`;
   };
   const swipeEnd = () => {
-    // setSwipe({ ...swipe, start: e.targetTouches[0].clientX });
+    const windowWidth = window.innerWidth;
+    const sliderWidth = sliderTrack.current!.offsetWidth;
+    let start = slider.start;
+    if (start - slider.step > padding) {
+      start = 0;
+    } else if (start + sliderWidth - slider.step < windowWidth) {
+      start = -(sliderWidth - windowWidth + padding);
+    } else {
+      start = start - slider.step;
+    }
+
+    setSlider({ ...slider, start });
+    sliderTrack.current!.style.transform = `translateX(${start}px)`;
   };
 
   const onMouseDown = (e: MouseEvent) => {
-    // console.log(e);
-    setSlider({ ...slider, start: e.clientX, mouseDown: true });
+    setSlider({ ...slider, posX: e.clientX, mouseDown: true });
   };
   const onMouseMove = (e: MouseEvent) => {
     if (slider.mouseDown) {
+      const moveX = e.clientX;
+      const step = slider.posX - moveX;
+      const start = slider.start - step;
+
       setSlider({
         ...slider,
-        moveX: e.clientX,
-        step: slider.start - slider.moveX,
+        moveX,
+        step,
       });
-      // // setTrackStart(trackStart+swipe.step)
-      sliderTrack.current!.style.transform = `translateX(${-slider.step}px)`;
+      sliderTrack.current!.style.transform = `translateX(${start}px)`;
     }
   };
   const onMouseUp = () => {
-    setSlider({ ...slider, mouseDown: false });
+    const windowWidth = window.innerWidth;
+    const sliderWidth = sliderTrack.current!.offsetWidth;
+    let start = slider.start;
+
+    if (start - slider.step > padding) {
+      start = 0;
+    } else if (start + sliderWidth - slider.step < windowWidth) {
+      start = -(sliderWidth - windowWidth + padding);
+    } else {
+      start = start - slider.step;
+    }
+
+    setSlider({ ...slider, start, mouseDown: false });
+    sliderTrack.current!.style.transform = `translateX(${start}px)`;
   };
 
   useEffect(() => {
-    // console.log(sliderTrack.current.offsetWidth);
     if (sliderTrack.current) {
       setSlider({
         ...slider,
