@@ -4,4 +4,4 @@ Simple custom carousel. You can swipe carousel using arrow-buttons, mouse or tou
 
 # Deploy
 
-[Carousel](https://tyronmaster.github.io/react-slider)
+[Carousel](https://tyronmaster.github.io/React-slider)
